@@ -23,20 +23,46 @@ grid_width = round(screen_width/grid_size)
 
 print(grid_height,grid_width)
 
-max_val = 10
+max_val = 100
+
+def get_surrounding_cells(x,y):
+    total = 0
+    for i in range(-1,2):
+        for ii in range(-1,2):
+            try:
+                value = tiles[(x+i,y+ii)]
+                if value == 1:
+                    total += 1
+            except:
+                pass
+
+    return total
+
+def gen_tile(x,y):
+    total = get_surrounding_cells(x,y)
+    water_chance = total*120
+    if water_chance == 120:
+        water_chance = 500
+    if water_chance == 0:
+        water_chance = 1
+    value = randint(0,1000)
+    if value < water_chance:
+        tiles[(x,y)] = 1 #1 is water
+        
+    else:
+        tiles[(x,y)] = 0 #0 is grass, nothing would be faster though
 
 for x in range(grid_width): #bad but not that bad
     for y in range(grid_height):
-        value = randint(0,max_val)
-        if value == max_val:
-            tiles[(x,y)] = 1 #1 is water
-        else:
-            tiles[(x,y)] = 0 #0 is grass, nothing would be faster though
+        gen_tile(x,y)
+
 
 width = grid_size*grid_width
 height = grid_size*grid_height
 
 surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+
+
 
 def draw_screen():
     offset_x = player['pos'][0]
@@ -63,11 +89,7 @@ def draw_tiles():
             try:
                 value = tiles[(cell_x,cell_y)]
             except:
-                value = randint(0,max_val)
-                if value == max_val:
-                    tiles[(cell_x,cell_y)] = 1 #1 is water
-                else:
-                    tiles[(cell_x,cell_y)] = 0 #0 is grass, nothing would be faster though
+                gen_tile(cell_x,cell_y)
                 value = tiles[(cell_x,cell_y)]
             if value == 1:
                 colour = (0,0,255)
