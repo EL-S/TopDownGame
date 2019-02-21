@@ -25,6 +25,22 @@ print(grid_height,grid_width)
 
 max_val = 100
 
+def gen_pastel():
+    red = randint(0,255)
+    green = randint(0,255)
+    blue = randint(0,255)
+    white = 255
+    red_old = red
+    green_old = green
+    blue_old = blue
+    red = round((red+white)/2)
+    green = round((green+white)/2)
+    blue = round((blue+white)/2)
+    red = red-round((red-red_old)/3)
+    green = green-round((green-green_old)/3)
+    blue = blue-round((blue-blue_old)/3)
+    return (red,green,blue)
+
 def get_surrounding_cells(x,y):
     total = 0
     for i in range(-1,2):
@@ -63,20 +79,22 @@ def gen_tile(x,y):
                             tiles[(x+i,y+ii)] = 4 #4 is light water   
     else:
         #land tile
-        flowerchance = 100
+        flowerchance = 30
         light_grass_chance = 300
         value = randint(0,1000)
         if value < flowerchance:
             tiles[(x,y)] = 3 #flower
             tiles_data[(x,y)] = {}
-            tiles_data[(x,y)]['colour'] = (randint(0,255),randint(0,255),randint(0,255))
+            pastel1 = gen_pastel()
+            tiles_data[(x,y)]['colour'] = pastel1
             randvalue = randint(0,1)
             if randvalue == 0:
                 background_tile = 0
             else:
                 background_tile = 2
             tiles_data[(x,y)]['background_tile'] = background_tile
-            tiles_data[(x,y)]['petal_colour'] = (randint(0,255),randint(0,255),randint(0,255))
+            pastel2 = gen_pastel()
+            tiles_data[(x,y)]['petal_colour'] = pastel2
             #flower background and colour
         elif value < light_grass_chance:
             tiles[(x,y)] = 2 #light grass
@@ -87,13 +105,10 @@ for x in range(grid_width): #bad but not that bad
     for y in range(grid_height):
         gen_tile(x,y)
 
-
 width = grid_size*grid_width
 height = grid_size*grid_height
 
 surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-
-
 
 def draw_screen():
     offset_x = player['pos'][0]
@@ -114,7 +129,7 @@ def draw_tiles():
     offset_y = player['pos'][1]
 
     colours = {"grass":(0,255,0),
-               "light_grass":(127,255,0),
+               "light_grass":(80,255,0),
                "water":(0,0,255),
                "light_water":(0,25,255)}
     
@@ -221,7 +236,6 @@ def move(direction):
     elif direction == 'right':
         if tiles[cell_x+1,cell_y] not in water_tiles:
             player['pos'][0] += 1
-    draw_screen()
 
 running = True
 
@@ -229,5 +243,6 @@ running = True
 draw_screen()
 while running:
     key_check()
+    draw_screen()
 
 pygame.quit()
