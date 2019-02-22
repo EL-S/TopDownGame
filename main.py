@@ -56,7 +56,7 @@ def get_surrounding_cells(x,y):
 
 def gen_tile(x,y):
     total = get_surrounding_cells(x,y)
-    water_chance = total*1200
+    water_chance = total*1200*2
     if water_chance == 0:
         water_chance = 1
     value = randint(0,10000)
@@ -219,6 +219,11 @@ def key_check(): #yuck
         move('down')
     if keys[pygame.K_d]:
         move('right')
+    cell_x = int(grid_width/2)+player['pos'][0]
+    cell_y = int(grid_height/2)+player['pos'][1]
+    water_tiles = [1,4]
+    if tiles[cell_x,cell_y] in water_tiles:
+        player['pos'][1] += 1
 
 def move(direction):
     cell_x = int(grid_width/2)+player['pos'][0]
