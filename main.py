@@ -25,7 +25,7 @@ print(grid_height,grid_width)
 
 max_val = 100
 
-def gen_pastel():
+def gen_pastel(): #this is inefficient, please update
     red = randint(0,255)
     green = randint(0,255)
     blue = randint(0,255)
