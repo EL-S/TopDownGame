@@ -120,7 +120,7 @@ def draw_screen():
 
     draw_player()
 
-    pygame.display.update()
+    pygame.display.update() #need more efficient update function
 
 def draw_tiles():
     global tiles, player
