@@ -3,6 +3,8 @@ from random import randint
 import math
 import time
 
+# include zoom feature again
+
 tiles = {}
 
 tiles_data = {}
